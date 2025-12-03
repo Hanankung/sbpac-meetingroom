@@ -130,7 +130,7 @@
         {{-- Sidebar เมนูด้านซ้าย --}}
         <aside class="sidebar">
             <div class="section-title">เมนูหลัก</div>
-            <a href="{{ route('calendar') }}" class="menu-item">
+            <a href="{{ route('admin.index') }}" class="menu-item">
                 <i class="bi bi-house-door-fill"></i>
                 <span>ปฏิทินการใช้ห้อง</span>
             </a>
@@ -139,7 +139,7 @@
             <div class="section-title">รายการ</div>
             <a href="#" class="menu-item">
                 <i class="bi bi-calendar2-check"></i>
-                <span>จองห้องประชุม</span>
+                <span>ห้องประชุม</span>
             </a>
             <a href="#" class="menu-item">
                 <i class="bi bi-clock-history"></i>
@@ -147,7 +147,7 @@
             </a>
 
             <div class="section-title">บุคคล</div>
-            <a href="{{ route('admin.login') }}" class="menu-item">
+            <a href="#" class="menu-item">
                 <i class="bi bi-person-circle"></i>
                 <span>สำหรับเจ้าหน้าที่</span>
             </a>
@@ -160,6 +160,8 @@
     </div>
 
     @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
