@@ -137,7 +137,7 @@
 
 
             <div class="section-title">รายการ</div>
-            <a href="#" class="menu-item">
+            <a href="{{ route('admin.rooms') }}" class="menu-item">
                 <i class="bi bi-calendar2-check"></i>
                 <span>ห้องประชุม</span>
             </a>
@@ -161,6 +161,9 @@
 
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 

@@ -11,8 +11,8 @@ class Room extends Model
     protected $fillable = [
         'room_name',
         'building',
-        'organization',
-        'department',
         'room_image',
+        'quantity',
+        'description',
     ];
 }

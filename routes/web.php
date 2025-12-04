@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
-
+use App\Http\Controllers\AdminRoomController;
 
 Route::get('/', function () {
     return view('users.index');
 });
 
-// ปฏิทินการใช้ห้องประชุม
+// ปฏิทินการใช้ห้องประชุม (ฝั่งผู้ใช้ทั่วไป)
 Route::get('/calendar', function () {
     return view('users.calendar');
 })->name('calendar');
@@ -16,11 +16,28 @@ Route::get('/calendar', function () {
 // ====== Admin Auth ======
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+
+// logout
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-Route::get('/admin', function () {
-    return view('admin.index');
-})->name('admin.index');
+// ====== พื้นที่ /admin ======
+Route::prefix('admin')->group(function () {
 
-// route ออกจากระบบ
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    // Dashboard
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    // ห้องประชุม
+    Route::get('/rooms',          [AdminRoomController::class, 'index'])->name('admin.rooms');
+    Route::get('/rooms/create',   [AdminRoomController::class, 'create'])->name('admin.rooms.create');
+    Route::post('/rooms',         [AdminRoomController::class, 'store'])->name('admin.rooms.store');
+
+    //สำหรับ แก้ไข / อัปเดต / ลบ
+    Route::get('/rooms/{room}/edit', [AdminRoomController::class, 'edit'])->name('admin.rooms.edit');
+    Route::put('/rooms/{room}',      [AdminRoomController::class, 'update'])->name('admin.rooms.update');
+    Route::delete('/rooms/{room}',   [AdminRoomController::class, 'destroy'])->name('admin.rooms.destroy');
+    
+    //show
+    Route::get('/rooms/{room}', [AdminRoomController::class, 'show'])->name('admin.rooms.show');
+});
