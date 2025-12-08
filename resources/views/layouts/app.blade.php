@@ -137,7 +137,7 @@
 
 
             <div class="section-title">รายการ</div>
-            <a href="#" class="menu-item">
+            <a href="{{ route('users.rooms') }}" class="menu-item">
                 <i class="bi bi-calendar2-check"></i>
                 <span>จองห้องประชุม</span>
             </a>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminRoomController;
+use App\Http\Controllers\UserRoomController;
 
 Route::get('/', function () {
     return view('users.index');
@@ -12,6 +13,12 @@ Route::get('/', function () {
 Route::get('/calendar', function () {
     return view('users.calendar');
 })->name('calendar');
+
+// หน้า "จองห้องประชุม" ของผู้ใช้
+Route::get('/rooms', [UserRoomController::class, 'index'])->name('users.rooms');
+// หน้าแสดง "รายละเอียดห้องประชุม 1 ห้อง"
+Route::get('/rooms/{room}', [UserRoomController::class, 'show'])->name('user.rooms.show');
+
 
 // ====== Admin Auth ======
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
