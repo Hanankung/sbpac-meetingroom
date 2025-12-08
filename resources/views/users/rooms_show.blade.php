@@ -269,7 +269,7 @@
 
                     {{-- ปุ่มจอง --}}
                     <div class="room-cta-row">
-                        <a href="#"
+                        <a href="{{ route('user.bookings.create', $room->id) }}"
                            class="btn btn-success btn-room-book">
                             จองห้องนี้
                         </a>

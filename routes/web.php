@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminRoomController;
 use App\Http\Controllers\UserRoomController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/', function () {
     return view('users.index');
@@ -19,6 +20,9 @@ Route::get('/rooms', [UserRoomController::class, 'index'])->name('users.rooms');
 // หน้าแสดง "รายละเอียดห้องประชุม 1 ห้อง"
 Route::get('/rooms/{room}', [UserRoomController::class, 'show'])->name('user.rooms.show');
 
+// ใหม่: ฟอร์มจอง + บันทึกการจอง
+Route::get('/rooms/{room}/book',  [BookingController::class, 'create'])->name('user.bookings.create');
+Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
 
 // ====== Admin Auth ======
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
