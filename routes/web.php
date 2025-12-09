@@ -6,15 +6,15 @@ use App\Http\Controllers\AdminRoomController;
 use App\Http\Controllers\UserRoomController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminBookingController;
+use App\Http\Controllers\CalendarController;
 
 Route::get('/', function () {
     return view('users.index');
 });
 
 // ปฏิทินการใช้ห้องประชุม (ฝั่งผู้ใช้ทั่วไป)
-Route::get('/calendar', function () {
-    return view('users.calendar');
-})->name('calendar');
+Route::get('/calendar', [CalendarController::class, 'index'])
+    ->name('calendar');
 
 // หน้า "จองห้องประชุม" ของผู้ใช้
 Route::get('/rooms', [UserRoomController::class, 'index'])->name('users.rooms');
