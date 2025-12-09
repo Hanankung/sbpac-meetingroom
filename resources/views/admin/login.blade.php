@@ -38,7 +38,6 @@
             margin-bottom: 24px;
         }
 
-        /* 👇 แก้สอง block นี้ */
         .login-logo {
             width: 80px;
             height: 80px;
@@ -55,8 +54,6 @@
             height: 100%;
             object-fit: cover;
         }
-
-        /* 👆 */
 
         .login-title-th {
             font-weight: 700;
@@ -96,6 +93,17 @@
         .text-error {
             font-size: 13px;
         }
+
+        /* ทำให้พื้นที่โลโก้ + ชื่อ กลายเป็นลิงก์ */
+        .click-home {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .click-home:hover {
+            opacity: 0.85;
+        }
     </style>
 
 </head>
@@ -103,18 +111,21 @@
 <body>
 
     <div class="container login-wrapper d-flex justify-content-center align-items-center">
-        
+
         <div class="card login-card p-4 p-md-5">
-            {{-- หัวการ์ด: โลโก้ + ชื่อหน่วยงาน --}}
-            <div class="login-logo-wrapper">
-                <div class="login-logo">
-                    <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต.">
+
+            {{-- ✅ คลิกโลโก้ + ชื่อ แล้วกลับหน้า index --}}
+            <a href="{{ url('/') }}" class="click-home">
+                <div class="login-logo-wrapper">
+                    <div class="login-logo">
+                        <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต.">
+                    </div>
+                    <div>
+                        <p class="login-title-th mb-1">ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้</p>
+                        <p class="login-title-en mb-0">Southern Border Provinces Administrative Centre</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="login-title-th mb-1">ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้</p>
-                    <p class="login-title-en mb-0">Southern Border Provinces Administrative Centre</p>
-                </div>
-            </div>
+            </a>
 
             {{-- ฟอร์ม Login --}}
             <form method="POST" action="{{ route('admin.login.submit') }}">

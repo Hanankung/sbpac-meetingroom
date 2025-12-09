@@ -141,7 +141,7 @@
                 <i class="bi bi-calendar2-check"></i>
                 <span>ห้องประชุม</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="{{ route('admin.bookings.history') }}" class="menu-item">
                 <i class="bi bi-clock-history"></i>
                 <span>ประวัติการจอง</span>
             </a>

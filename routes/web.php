@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminRoomController;
 use App\Http\Controllers\UserRoomController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AdminBookingController;
 
 Route::get('/', function () {
     return view('users.index');
@@ -23,6 +24,14 @@ Route::get('/rooms/{room}', [UserRoomController::class, 'show'])->name('user.roo
 // ใหม่: ฟอร์มจอง + บันทึกการจอง
 Route::get('/rooms/{room}/book',  [BookingController::class, 'create'])->name('user.bookings.create');
 Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
+
+// ประวัติการจองห้องประชุม (ฝั่งผู้ใช้งาน)
+Route::get('/bookings/history', [UserRoomController::class, 'bookingHistory'])
+    ->name('bookings.history');
+
+// หน้า "รายละเอียดประวัติการจอง 1 รายการ"
+Route::get('/bookings/{booking}', [UserRoomController::class, 'historyShow'])
+    ->name('bookings.show');
 
 // ====== Admin Auth ======
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
@@ -51,4 +60,12 @@ Route::prefix('admin')->group(function () {
     
     //show
     Route::get('/rooms/{room}', [AdminRoomController::class, 'show'])->name('admin.rooms.show');
+
+    // ประวัติการจอง (admin)
+    Route::get('/bookings/history', [AdminBookingController::class, 'index'])
+        ->name('admin.bookings.history');
+
+    // รายละเอียดประวัติการจอง 1 รายการ (admin)
+    Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])
+        ->name('admin.bookings.show');
 });
