@@ -72,17 +72,27 @@
             <span class="page-title">ประวัติการจอง</span>
         </div>
 
-        <div class="input-group" style="max-width:250px;">
-            <span class="input-group-text bg-white">
-                <i class="bi bi-search"></i>
-            </span>
-            <input disabled type="text" class="form-control" placeholder="ค้นหา...">
+        {{-- ฟอร์มค้นหา --}}
+        <div style="max-width:260px;">
+            <form method="GET" action="{{ route('bookings.history') }}">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input
+                        type="text"
+                        name="q"
+                        class="form-control"
+                        placeholder="ค้นหาชื่อ / ห้อง / หัวข้อ"
+                        value="{{ request('q') }}"
+                    >
+                </div>
+            </form>
         </div>
     </div>
 
     <div class="table-wrapper">
-
-        <table class="table table-hover">
+        <table class="table table-hover mb-0">
             <thead>
                 <tr>
                     <th>วันที่จอง</th>
@@ -96,32 +106,19 @@
             <tbody>
                 @forelse ($bookings as $booking)
                     <tr>
-                        <td>
-                            {{-- วันที่จอง ใช้ created_at --}}
-                            {{ \Carbon\Carbon::parse($booking->created_at)->format('d/m/Y') }}
-                        </td>
+                        <td>{{ \Carbon\Carbon::parse($booking->created_at)->format('d/m/Y') }}</td>
+
+                        <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d/m/Y') }}</td>
 
                         <td>
-                            {{-- วันที่ใช้ห้อง ใช้ booking_date --}}
-                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('d/m/Y') }}
-                        </td>
-
-                        <td>
-                            {{-- เวลา --}}
                             {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}
                             -
                             {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
                         </td>
 
-                        <td>
-                            {{-- ชื่อ - สกุล --}}
-                            {{ $booking->name }} {{ $booking->lastname }}
-                        </td>
+                        <td>{{ $booking->name }} {{ $booking->lastname }}</td>
 
-                        <td>
-                            {{-- ชื่อห้อง --}}
-                            {{ $booking->room->room_name ?? '-' }}
-                        </td>
+                        <td>{{ $booking->room->room_name ?? '-' }}</td>
 
                         <td class="text-center">
                             <a href="{{ route('bookings.show', $booking->id) }}" class="btn-detail">รายละเอียด</a>
@@ -129,15 +126,17 @@
                     </tr>
                 @empty
                     <tr>
-                        {{-- มี 6 คอลัมน์ ต้อง colspan="6" --}}
                         <td colspan="6" class="text-center text-muted py-4">
-                            ยังไม่มีประวัติการจอง
+                            @if(request('q'))
+                                ไม่พบรายการตามคำค้น "{{ request('q') }}"
+                            @else
+                                ยังไม่มีประวัติการจอง
+                            @endif
                         </td>
                     </tr>
                 @endforelse
             </tbody>
-
-
+        </table>
     </div>
 
 @endsection

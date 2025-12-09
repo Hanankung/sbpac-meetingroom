@@ -109,7 +109,6 @@
             color: #6b7280;
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            /* แสดง 2 บรรทัด */
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -154,18 +153,32 @@
             </div>
             <div>
                 <p class="page-title mb-0">ห้องประชุมทั้งหมด</p>
-                <p class="page-subtitle mb-0">เลือกห้องที่ต้องการจองจากรายการด้านล่าง</p>
+                <p class="page-subtitle mb-0">
+                    @if(!empty($search))
+                        ผลการค้นหา: “{{ $search }}”
+                    @else
+                        เลือกห้องที่ต้องการจองจากรายการด้านล่าง
+                    @endif
+                </p>
             </div>
         </div>
 
-        {{-- กล่องค้นหา (ไว้ทำจริงภายหลัง) --}}
+        {{-- กล่องค้นหา --}}
         <div class="search-box">
-            <div class="input-group input-group-sm">
-                <span class="input-group-text bg-white border-end-0">
-                    <i class="bi bi-search text-muted"></i>
-                </span>
-                <input type="text" class="form-control border-start-0" placeholder="ค้นหาชื่อห้อง / อาคาร" disabled>
-            </div>
+            <form action="{{ route('users.rooms') }}" method="GET">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input
+                        type="text"
+                        name="q"
+                        class="form-control border-start-0"
+                        placeholder="ค้นหาชื่อห้อง / อาคาร"
+                        value="{{ old('q', $search ?? '') }}"
+                    >
+                </div>
+            </form>
         </div>
     </div>
 
@@ -174,9 +187,13 @@
             <div class="mb-2">
                 <i class="bi bi-door-open" style="font-size:30px;"></i>
             </div>
-            <h6 class="fw-bold mb-1">ยังไม่มีห้องประชุมให้จอง</h6>
+            <h6 class="fw-bold mb-1">ไม่พบห้องประชุม</h6>
             <p class="mb-0" style="font-size:13px;">
-                กรุณาติดต่อเจ้าหน้าที่เพื่อเพิ่มห้องประชุมก่อนทำการจอง
+                @if(!empty($search))
+                    ลองเปลี่ยนคำค้นหา หรือพิมพ์ชื่อห้อง / อาคารให้สั้นลง
+                @else
+                    กรุณาติดต่อเจ้าหน้าที่เพื่อเพิ่มห้องประชุมก่อนทำการจอง
+                @endif
             </p>
         </div>
     @else
@@ -216,16 +233,6 @@
                                 <span>อาคาร {{ $room->building ?: '-' }}</span>
                             </div>
 
-                            {{-- @if ($room->description)
-                                <p class="room-desc mb-3">
-                                    {{ \Illuminate\Support\Str::limit($room->description, 80) }}
-                                </p>
-                            @else
-                                <p class="room-desc mb-3 text-muted">
-                                    ยังไม่ได้ระบุรายละเอียดเพิ่มเติม
-                                </p>
-                            @endif --}}
-
                             <div class="room-card-footer mt-auto d-flex justify-content-between align-items-center">
                                 <a href="{{ route('user.rooms.show', $room->id) }}"
                                     class="btn btn-outline-secondary btn-sm btn-detail">
@@ -236,7 +243,6 @@
                                     class="btn btn-success btn-sm btn-book">
                                     จอง
                                 </a>
-
                             </div>
 
                         </div>
