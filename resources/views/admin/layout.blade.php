@@ -1,3 +1,4 @@
+{{-- resources/views/admin/layout.blade.php --}}
 <!doctype html>
 <html lang="th">
 
@@ -72,19 +73,12 @@
             align-items: center;
             justify-content: center;
             background-color: #000;
-            /* ถ้ารูปเป็นทรงเหลี่ยม จะช่วยให้ตัดพื้นหลัง */
             margin-right: 12px;
         }
 
         .topbar-logo-wrapper img {
             height: 52px;
-            /* ปรับให้พอดีกับวง */
         }
-
-        /* .topbar img {
-            height: 50px;
-            margin-right: 12px;
-        } */
 
         .topbar-title-th {
             font-weight: 700;
@@ -102,9 +96,7 @@
             height: 250px;
             border-radius: 50%;
             object-fit: cover;
-            /* ให้รูปเต็มวง */
             background-color: #000;
-            /* เผื่อรูปมีพื้นขาว จะดูกลมชัดขึ้น */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
         }
     </style>
@@ -114,27 +106,28 @@
 
 <body>
 
-    {{-- แถวบนโลโก้ + ชื่อหน่วยงาน --}}
+    {{-- แถวบนโลโก้ + ชื่อหน่วยงาน (คลิกแล้วไปหน้า admin.index) --}}
     <header class="topbar">
-        <div class="topbar-logo-wrapper">
-            <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต." class="main-logo">
-        </div>
-        <div>
-            <p class="topbar-title-th">ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้</p>
-            <p class="topbar-title-en">Southern Border Provinces Administrative Centre</p>
-        </div>
+        <a href="{{ route('admin.index') }}"
+           class="d-flex align-items-center text-decoration-none text-dark">
+            <div class="topbar-logo-wrapper">
+                <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต." class="main-logo">
+            </div>
+            <div>
+                <p class="topbar-title-th mb-0">ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้</p>
+                <p class="topbar-title-en mb-0">Southern Border Provinces Administrative Centre</p>
+            </div>
+        </a>
     </header>
-
 
     <div class="d-flex">
         {{-- Sidebar เมนูด้านซ้าย --}}
         <aside class="sidebar">
             <div class="section-title">เมนูหลัก</div>
-            <a href="{{ route('admin.index') }}" class="menu-item">
+            <a href="{{ route('admin.calendar') }}" class="menu-item">
                 <i class="bi bi-house-door-fill"></i>
                 <span>ปฏิทินการใช้ห้อง</span>
             </a>
-
 
             <div class="section-title">รายการ</div>
             <a href="{{ route('admin.rooms') }}" class="menu-item">
@@ -161,10 +154,7 @@
 
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 
 </html>

@@ -59,4 +59,52 @@ class CalendarController extends Controller
             'selectedBookings'  => $selectedBookings,
         ]);
     }
+    
+    public function adminCalendar(Request $request)
+    {
+        // ===== ปฏิทินฝั่งแอดมิน (ใช้ logic เดียวกันเป๊ะ) =====
+        $current = $request->query('month')
+            ? Carbon::parse($request->query('month'))->startOfMonth()
+            : Carbon::now()->startOfMonth();
+
+        $startOfWeek = $current->copy()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek   = $current->copy()->endOfMonth()->endOfWeek(Carbon::SUNDAY);
+
+        $bookings = Booking::with('room')
+            ->whereBetween('booking_date', [
+                $startOfWeek->toDateString(),
+                $endOfWeek->toDateString(),
+            ])
+            ->orderBy('booking_date')
+            ->orderBy('start_time')
+            ->get();
+
+        $bookingsByDate = $bookings->groupBy('booking_date');
+
+        $date  = $startOfWeek->copy();
+        $weeks = [];
+        while ($date->lte($endOfWeek)) {
+            $week = [];
+            for ($i = 0; $i < 7; $i++) {
+                $week[] = $date->copy();
+                $date->addDay();
+            }
+            $weeks[] = $week;
+        }
+
+        $selectedDate = $request->query('date');
+        $selectedBookings = [];
+        if ($selectedDate) {
+            $selectedBookings = $bookingsByDate->get($selectedDate, collect());
+        }
+
+        // เปลี่ยนเป็น view ฝั่ง admin
+        return view('admin.calendar', [
+            'current'          => $current,
+            'weeks'            => $weeks,
+            'bookingsByDate'   => $bookingsByDate,
+            'selectedDate'     => $selectedDate,
+            'selectedBookings' => $selectedBookings,
+        ]);
+    }
 }

@@ -68,4 +68,8 @@ Route::prefix('admin')->group(function () {
     // รายละเอียดประวัติการจอง 1 รายการ (admin)
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])
         ->name('admin.bookings.show');
+    
+    // ===== ปฏิทินฝั่งแอดมิน =====
+    Route::get('/calendar', [CalendarController::class, 'adminCalendar'])
+        ->name('admin.calendar');
 });
