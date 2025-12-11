@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>@yield('title', 'ระบบจองห้องประชุม ศอ.บต.')</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('image/sbpac-logo.jpg') }}?v=2">
+    <link rel="icon" type="image/png" href="{{ asset('image/cropped-logo.png') }}?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap --}}

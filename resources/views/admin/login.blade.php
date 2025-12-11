@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>เข้าสู่ระบบสำหรับเจ้าหน้าที่ | ระบบจองห้องประชุม ศอ.บต.</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/sbpac-logo.jpg') }}?v=2">
+    <link rel="icon" type="image/png" href="{{ asset('image/cropped-logo.png') }}?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap --}}
