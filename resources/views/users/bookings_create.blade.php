@@ -1,127 +1,131 @@
-{{-- resources/views/users/bookings_create.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'จองห้องประชุม | ระบบจองห้องประชุม ศอ.บต.')
 
 @push('styles')
-<style>
-    main {
-        background: #f3f4f6;
-    }
+    {{-- flatpickr CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    {{-- ธีม modern หน่อย --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
 
-    /* การ์ด head ด้านบน */
-    .page-header-card {
-        background: linear-gradient(135deg, #f9fafb 0%, #ffffff 50%, #ecfdf3 100%);
-        border-radius: 18px;
-        padding: 18px 22px;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-        border: 1px solid #e5e7eb;
-        margin-bottom: 22px;
-    }
+    <style>
+        main {
+            background: #f3f4f6;
+        }
 
-    .page-title {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0;
-        color: #111827;
-    }
+        /* การ์ด head ด้านบน */
+        .page-header-card {
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 50%, #ecfdf3 100%);
+            border-radius: 18px;
+            padding: 18px 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 22px;
+        }
 
-    .room-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: #ecfdf3;
-        color: #047857;
-        font-size: 14px;
-        font-weight: 600;
-    }
+        .page-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: #111827;
+        }
 
-    .page-header-pill {
-        background:#111827;
-        color:#e5e7eb;
-        border-radius:999px;
-        padding:6px 14px;
-        font-size:12px;
-        display:flex;
-        align-items:center;
-        gap:6px;
-    }
+        .room-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #ecfdf3;
+            color: #047857;
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-    /* การ์ด section */
-    .booking-section-card {
-        background:#ffffff;
-        border-radius:16px;
-        padding:20px 22px;
-        box-shadow:0 8px 22px rgba(15,23,42,0.06);
-        border:1px solid #e5e7eb;
-        margin-bottom:20px;
-    }
+        .page-header-pill {
+            background:#111827;
+            color:#e5e7eb;
+            border-radius:999px;
+            padding:6px 14px;
+            font-size:12px;
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
 
-    .booking-section-header {
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        margin-bottom:14px;
-    }
+        /* การ์ด section */
+        .booking-section-card {
+            background:#ffffff;
+            border-radius:16px;
+            padding:20px 22px;
+            box-shadow:0 8px 22px rgba(15,23,42,0.06);
+            border:1px solid #e5e7eb;
+            margin-bottom:20px;
+        }
 
-    .booking-section-title {
-        font-weight:700;
-        font-size:18px;
-        display:flex;
-        align-items:center;
-        gap:8px;
-        color:#111827;
-    }
+        .booking-section-header {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:14px;
+        }
 
-    .booking-section-title i {
-        font-size:18px;
-    }
+        .booking-section-title {
+            font-weight:700;
+            font-size:18px;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            color:#111827;
+        }
 
-    .booking-section-hint {
-        font-size:12px;
-        color:#9ca3af;
-    }
+        .booking-section-title i {
+            font-size:18px;
+        }
 
-    /* label & input */
-    .form-label {
-        font-size: 15px;
-        font-weight: 600;
-        color:#374151;
-    }
+        .booking-section-hint {
+            font-size:12px;
+            color:#9ca3af;
+        }
 
-    .form-control {
-        border-radius:10px;
-        border-color:#e5e7eb;
-        font-size:16px;
-    }
+        /* label & input */
+        .form-label {
+            font-size: 15px;
+            font-weight: 600;
+            color:#374151;
+        }
 
-    .form-control:focus {
-        border-color:#16a34a;
-        box-shadow:0 0 0 0.15rem rgba(34,197,94,0.2);
-    }
+        .form-control {
+            border-radius:10px;
+            border-color:#e5e7eb;
+            font-size:16px;
+        }
 
-    /* ปุ่มส่ง */
-    .btn-submit-booking {
-        border-radius:999px;
-        padding-inline:32px;
-        font-weight:600;
-        font-size:18px;
-        box-shadow:0 10px 22px rgba(22,163,74,0.3);
-    }
+        .form-control:focus {
+            border-color:#16a34a;
+            box-shadow:0 0 0 0.15rem rgba(34,197,94,0.2);
+        }
 
-    .btn-submit-booking i {
-        font-size:16px;
-    }
+        /* ปุ่มส่ง */
+        .btn-submit-booking {
+            border-radius:999px;
+            padding-inline:32px;
+            font-weight:600;
+            font-size:18px;
+            box-shadow:0 10px 22px rgba(22,163,74,0.3);
+        }
 
-    /* ปุ่มย้อนกลับ */
-    .btn-back-soft {
-        border-radius:999px;
-        font-size:13px;
-        padding-inline:14px;
-    }
-</style>
+        .btn-submit-booking i {
+            font-size:16px;
+        }
+
+        /* ปุ่มย้อนกลับ */
+        .btn-back-soft {
+            border-radius:999px;
+            font-size:13px;
+            padding-inline:14px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -154,7 +158,7 @@
     <form method="POST" action="{{ route('user.bookings.store', $room->id) }}">
         @csrf
 
-        {{-- ✅ สลับลำดับ: ข้อมูลผู้ขอใช้ห้อง มาก่อน --}}
+        {{-- ✅ ข้อมูลผู้ขอใช้ห้อง --}}
         <div class="booking-section-card">
             <div class="booking-section-header">
                 <div class="booking-section-title">
@@ -205,7 +209,7 @@
             </div>
         </div>
 
-        {{-- ข้อมูลการใช้ห้อง (ตามหลัง) --}}
+        {{-- ✅ ข้อมูลการใช้ห้อง + date & time picker ใหม่ --}}
         <div class="booking-section-card">
             <div class="booking-section-header">
                 <div class="booking-section-title">
@@ -218,28 +222,52 @@
             </div>
 
             <div class="row g-3">
+                {{-- วันที่ใช้ห้อง --}}
                 <div class="col-md-4">
                     <label class="form-label">วันที่ใช้ห้อง <span class="text-danger">*</span></label>
-                    <input type="date" name="booking_date" class="form-control"
-                           value="{{ old('booking_date') }}" required>
+                    <input
+                        type="text"
+                        name="booking_date"
+                        id="booking_date"
+                        class="form-control js-date-picker"
+                        value="{{ old('booking_date') }}"
+                        placeholder="เลือกวันที่"
+                        required
+                    >
                     @error('booking_date')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
+                {{-- เวลาเริ่ม --}}
                 <div class="col-md-4">
                     <label class="form-label">เวลาเริ่ม <span class="text-danger">*</span></label>
-                    <input type="time" name="start_time" class="form-control"
-                           value="{{ old('start_time') }}" required>
+                    <input
+                        type="text"
+                        name="start_time"
+                        id="start_time"
+                        class="form-control js-time-start"
+                        value="{{ old('start_time') }}"
+                        placeholder="เลือกเวลาเริ่ม"
+                        required
+                    >
                     @error('start_time')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
+                {{-- เวลาสิ้นสุด --}}
                 <div class="col-md-4">
                     <label class="form-label">เวลาสิ้นสุด <span class="text-danger">*</span></label>
-                    <input type="time" name="end_time" class="form-control"
-                           value="{{ old('end_time') }}" required>
+                    <input
+                        type="text"
+                        name="end_time"
+                        id="end_time"
+                        class="form-control js-time-end"
+                        value="{{ old('end_time') }}"
+                        placeholder="เลือกเวลาสิ้นสุด"
+                        required
+                    >
                     @error('end_time')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
@@ -286,3 +314,41 @@
 
 </div>
 @endsection
+
+@push('scripts')
+    {{-- flatpickr JS + ภาษาไทย (optional) --}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ---------- Date picker ----------
+            flatpickr(".js-date-picker", {
+                locale: "th",                // ภาษาไทย
+                dateFormat: "Y-m-d",        // format ที่จะส่งเข้า DB
+                altInput: true,             // แสดงแบบสวย ๆ ให้ผู้ใช้
+                altFormat: "j F Y",         // 1 มกราคม 2568
+                defaultDate: "{{ old('booking_date') ?? '' }}",
+                minDate: "today",           // ไม่ให้เลือกวันย้อนหลัง (ถ้าไม่ต้องการตัดบรรทัดนี้ออก)
+            });
+
+            // ---------- Time picker (เริ่ม) ----------
+            flatpickr(".js-time-start", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",          // 24 ชม. เช่น 09:30
+                time_24hr: true,
+                defaultDate: "{{ old('start_time') ?? '' }}"
+            });
+
+            // ---------- Time picker (สิ้นสุด) ----------
+            flatpickr(".js-time-end", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                defaultDate: "{{ old('end_time') ?? '' }}"
+            });
+        });
+    </script>
+@endpush

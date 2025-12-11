@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'รายละเอียดประวัติการจอง | ระบบจองห้องประชุม ศอ.บต.')
+<link rel="icon" type="image/png" href="{{ asset('image/sbpac-logo.jpg') }}?v=2">
 
 @push('styles')
 <style>
