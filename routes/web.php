@@ -7,6 +7,8 @@ use App\Http\Controllers\UserRoomController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\AdminDashboardController;
+
 
 Route::get('/', function () {
     return view('users.index');
@@ -44,9 +46,8 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 Route::prefix('admin')->group(function () {
 
     // Dashboard
-    Route::get('/', function () {
-        return view('admin.index');
-    })->name('admin.index');
+    Route::get('/admin', [AdminDashboardController::class, 'index'])
+    ->name('admin.index');
 
     // ห้องประชุม
     Route::get('/rooms',          [AdminRoomController::class, 'index'])->name('admin.rooms');

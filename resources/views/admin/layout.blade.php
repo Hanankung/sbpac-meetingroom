@@ -78,6 +78,10 @@
 
         .topbar-logo-wrapper img {
             height: 52px;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+
         }
 
         .topbar-title-th {
@@ -90,15 +94,6 @@
             font-size: 12px;
             margin: 0;
         }
-
-        .main-logo {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #000;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-        }
     </style>
 
     @stack('styles')
@@ -106,12 +101,11 @@
 
 <body>
 
-    {{-- แถวบนโลโก้ + ชื่อหน่วยงาน (คลิกแล้วไปหน้า admin.index) --}}
+    {{-- แถวบนโลโก้ + ชื่อหน่วยงาน (คลิกกลับ dashboard ได้) --}}
     <header class="topbar">
-        <a href="{{ route('admin.index') }}"
-           class="d-flex align-items-center text-decoration-none text-dark">
+        <a href="{{ route('admin.index') }}" class="d-flex align-items-center text-decoration-none text-dark">
             <div class="topbar-logo-wrapper">
-                <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต." class="main-logo">
+                <img src="{{ asset('image/sbpac-logo.jpg') }}" alt="ศอ.บต.">
             </div>
             <div>
                 <p class="topbar-title-th mb-0">ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้</p>
@@ -139,10 +133,29 @@
                 <span>ประวัติการจอง</span>
             </a>
 
-            <div class="section-title">บุคคล</div>
-            <a href="#" class="menu-item">
-                <i class="bi bi-person-circle"></i>
-                <span>สำหรับเจ้าหน้าที่</span>
+            <div class="section-title">บัญชีผู้ใช้</div>
+
+            {{-- แสดงชื่อแอดมินที่ล็อกอินอยู่ --}}
+            <div class="px-3 py-2 small" style="border-top:1px solid rgba(255,255,255,0.1);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                        <div>เข้าสู่ระบบแล้ว</div>
+                        <div class="text-white-50">
+                            {{ session('admin_name', 'เจ้าหน้าที่ระบบ') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ปุ่มออกจากระบบเล็ก ๆ ที่ sidebar (ถ้าอยากมี) --}}
+            <form id="sidebar-logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+            <a href="#" class="menu-item"
+                onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>ออกจากระบบ</span>
             </a>
         </aside>
 
@@ -155,6 +168,7 @@
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 
 </html>
