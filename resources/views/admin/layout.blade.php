@@ -1,7 +1,6 @@
 {{-- resources/views/admin/layout.blade.php --}}
 <!doctype html>
 <html lang="th">
-
 <head>
     <meta charset="utf-8">
     <title>@yield('title', 'ระบบจองห้องประชุม ศอ.บต.')</title>
