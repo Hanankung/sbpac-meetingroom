@@ -155,7 +155,7 @@
             <div>
                 <p class="page-title mb-0">ห้องประชุมทั้งหมด</p>
                 <p class="page-subtitle mb-0">
-                    @if(!empty($search))
+                    @if (!empty($search))
                         ผลการค้นหา: “{{ $search }}”
                     @else
                         เลือกห้องที่ต้องการจองจากรายการด้านล่าง
@@ -171,13 +171,8 @@
                     <span class="input-group-text bg-white border-end-0">
                         <i class="bi bi-search text-muted"></i>
                     </span>
-                    <input
-                        type="text"
-                        name="q"
-                        class="form-control border-start-0"
-                        placeholder="ค้นหาชื่อห้อง / อาคาร"
-                        value="{{ old('q', $search ?? '') }}"
-                    >
+                    <input type="text" name="q" class="form-control border-start-0"
+                        placeholder="ค้นหาชื่อห้อง / อาคาร" value="{{ old('q', $search ?? '') }}">
                 </div>
             </form>
         </div>
@@ -190,7 +185,7 @@
             </div>
             <h6 class="fw-bold mb-1">ไม่พบห้องประชุม</h6>
             <p class="mb-0" style="font-size:13px;">
-                @if(!empty($search))
+                @if (!empty($search))
                     ลองเปลี่ยนคำค้นหา หรือพิมพ์ชื่อห้อง / อาคารให้สั้นลง
                 @else
                     กรุณาติดต่อเจ้าหน้าที่เพื่อเพิ่มห้องประชุมก่อนทำการจอง
@@ -240,10 +235,12 @@
                                     ดูรายละเอียด
                                 </a>
 
-                                <a href="{{ route('user.bookings.create', $room->id) }}"
-                                    class="btn btn-success btn-sm btn-book">
-                                    จอง
-                                </a>
+                                @auth
+                                    <a href="{{ route('user.bookings.create', $room->id) }}" class="btn btn-success">จอง</a>
+                                @else
+                                    <a href="{{ route('user.login') }}" class="btn btn-success">จอง</a>
+                                @endauth
+
                             </div>
 
                         </div>

@@ -1,6 +1,7 @@
 {{-- resources/views/admin/layout.blade.php --}}
 <!doctype html>
 <html lang="th">
+
 <head>
     <meta charset="utf-8">
     <title>@yield('title', 'ระบบจองห้องประชุม ศอ.บต.')</title>
@@ -133,6 +134,12 @@
                 <i class="bi bi-clock-history"></i>
                 <span>ประวัติการจอง</span>
             </a>
+
+            <a href="{{ route('admin.users.index') }}" class="menu-item">
+                <i class="bi bi-people"></i>
+                <span>ผู้ใช้งาน (พนักงาน)</span>
+            </a>
+
 
             <div class="section-title">บัญชีผู้ใช้</div>
 

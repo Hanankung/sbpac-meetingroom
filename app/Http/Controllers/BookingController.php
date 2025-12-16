@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -47,6 +48,7 @@ class BookingController extends Controller
 
         // 3) ถ้าไม่ชน -> สร้างการจองได้เลย (ถือว่าอนุมัติทันที)
         Booking::create([
+            'user_id'      => Auth::id(),// ✅ ผูกกับ user ที่ล็อกอินอยู่
             'room_id'       => $room->id,
             'booking_date'  => $request->booking_date,
             'start_time'    => $request->start_time,

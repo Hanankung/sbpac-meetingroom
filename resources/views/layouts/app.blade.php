@@ -148,11 +148,43 @@
                 <span>ประวัติการจอง</span>
             </a>
 
+            <div class="section-title">บัญชีผู้ใช้</div>
+
+            @auth
+                <div class="px-3 py-2 small" style="border-top:1px solid rgba(255,255,255,0.1);">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-check-fill"></i>
+                        <div>
+                            <div>ล็อกอินแล้ว</div>
+                            <div class="text-white-50">
+                                {{ auth()->user()->name }} {{ auth()->user()->lastname }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="user-logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+                <a href="#" class="menu-item"
+                    onclick="event.preventDefault(); document.getElementById('user-logout-form').submit();">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>ออกจากระบบ</span>
+                </a>
+            @else
+                <a href="{{ route('user.login') }}" class="menu-item">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>เข้าสู่ระบบพนักงาน</span>
+                </a>
+            @endauth
+
+
             <div class="section-title">บุคคล</div>
             <a href="{{ route('admin.login') }}" class="menu-item">
                 <i class="bi bi-person-circle"></i>
                 <span>สำหรับเจ้าหน้าที่</span>
             </a>
+
         </aside>
 
         {{-- เนื้อหาหลักของแต่ละหน้า --}}

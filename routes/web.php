@@ -8,6 +8,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\AdminUserController;
 
 
 Route::get('/', function () {
@@ -24,8 +26,14 @@ Route::get('/rooms', [UserRoomController::class, 'index'])->name('users.rooms');
 Route::get('/rooms/{room}', [UserRoomController::class, 'show'])->name('user.rooms.show');
 
 // ใหม่: ฟอร์มจอง + บันทึกการจอง
-Route::get('/rooms/{room}/book',  [BookingController::class, 'create'])->name('user.bookings.create');
-Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
+// Route::get('/rooms/{room}/book',  [BookingController::class, 'create'])->name('user.bookings.create');
+// Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/rooms/{room}/book', [BookingController::class, 'create'])->name('user.bookings.create');
+    Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
+});
+
 
 // ประวัติการจองห้องประชุม (ฝั่งผู้ใช้งาน)
 Route::get('/bookings/history', [UserRoomController::class, 'bookingHistory'])
@@ -35,7 +43,13 @@ Route::get('/bookings/history', [UserRoomController::class, 'bookingHistory'])
 Route::get('/bookings/{booking}', [UserRoomController::class, 'historyShow'])
     ->name('bookings.show');
 
-// ====== Admin Auth ======
+Route::get('/login', [UserAuthController::class, 'showLogin'])->name('user.login');
+Route::post('/login', [UserAuthController::class, 'login'])->name('user.login.submit');
+Route::post('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
+
+
+// ================================== Admin Auth ==============================================
+
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
@@ -46,8 +60,7 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 Route::prefix('admin')->group(function () {
 
     // Dashboard
-    Route::get('/admin', [AdminDashboardController::class, 'index'])
-    ->name('admin.index');
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.index');
 
     // ห้องประชุม
     Route::get('/rooms',          [AdminRoomController::class, 'index'])->name('admin.rooms');
@@ -73,4 +86,11 @@ Route::prefix('admin')->group(function () {
     // ===== ปฏิทินฝั่งแอดมิน =====
     Route::get('/calendar', [CalendarController::class, 'adminCalendar'])
         ->name('admin.calendar');
+    
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('admin.users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 });
