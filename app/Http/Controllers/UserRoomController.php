@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 
 class UserRoomController extends Controller
 {
@@ -40,8 +41,62 @@ class UserRoomController extends Controller
         return view('users.rooms_show', compact('room'));
     }
 
+    public function editBooking(Booking $booking)
+    {
+    abort_unless($booking->user_id === Auth::id(), 403);
+
+    $booking->load('room');
+
+    return view('users.bookings_edit', compact('booking'));
+    }
+
+    public function updateBooking(Request $request, Booking $booking)
+    {
+    abort_unless($booking->user_id === Auth::id(), 403);
+
+    $request->validate([
+        'booking_date'  => ['required', 'date'],
+        'start_time'    => ['required', 'date_format:H:i'],
+        'end_time'      => ['required', 'date_format:H:i', 'after:start_time'],
+        'meeting_topic' => ['required', 'string', 'max:255'],
+        'department'    => ['nullable', 'string', 'max:255'],
+        'name'          => ['required', 'string', 'max:100'],
+        'lastname'      => ['required', 'string', 'max:100'],
+        'phone'         => ['nullable', 'string', 'max:20'],
+        // ถ้าตัด email แล้ว ไม่ต้องมี
+    ]);
+
+    // ✅ เช็คเวลาซ้ำ
+    $overlap = Booking::where('room_id', $booking->room_id)
+        ->where('booking_date', $request->booking_date)
+        ->where('id', '!=', $booking->id)
+        ->where(function ($q) use ($request) {
+            $q->where('start_time', '<', $request->end_time)
+              ->where('end_time', '>', $request->start_time);
+        })
+        ->exists();
+
+    if ($overlap) {
+        return back()->withErrors(['time' => 'ช่วงเวลานี้ถูกจองแล้ว กรุณาเลือกเวลาใหม่'])->withInput();
+    }
+
+    $booking->update([
+        'booking_date'  => $request->booking_date,
+        'start_time'    => $request->start_time,
+        'end_time'      => $request->end_time,
+        'meeting_topic' => $request->meeting_topic,
+        'department'    => $request->department,
+        'name'          => $request->name,
+        'lastname'      => $request->lastname,
+        'phone'         => $request->phone,
+    ]);
+
+    return redirect()->route('bookings.show', $booking->id)
+        ->with('success', 'แก้ไขรายการจองเรียบร้อยแล้ว');
+}
+
     public function bookingHistory(Request $request)
-{
+    {
     // ดึงข้อมูลการจองทั้งหมด เรียงจากวันล่าสุด
     $bookings = Booking::orderBy('booking_date', 'desc')
         ->orderBy('start_time', 'asc')
@@ -50,6 +105,7 @@ class UserRoomController extends Controller
     $search = $request->input('q');
 
     $query = Booking::with('room')
+            ->where('user_id', Auth::id())
             ->orderByDesc('booking_date')
             ->orderBy('start_time');
 
@@ -82,6 +138,7 @@ class UserRoomController extends Controller
     
     public function historyShow(Booking $booking)
     {
+        abort_unless($booking->user_id === Auth::id(), 403);
         $booking->load('room'); // ดึงข้อมูลห้องมาด้วย (room_name ฯลฯ)
 
         return view('users.booking_history_show', compact('booking'));

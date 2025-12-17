@@ -1,49 +1,50 @@
+{{-- resources/views/users/booking_history_show.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'รายละเอียดประวัติการจอง | ระบบจองห้องประชุม ศอ.บต.')
 <link rel="icon" type="image/png" href="{{ asset('image/cropped-logo.png') }}?v=2">
 
 @push('styles')
-<style>
-    main {
-        background:#f3f4f6;
-    }
+    <style>
+        main {
+            background: #f3f4f6;
+        }
 
-    .page-header-card {
-        background:#fff;
-        border-radius:16px;
-        padding:18px 22px;
-        box-shadow:0 6px 20px rgba(0,0,0,0.06);
-        border:1px solid #e5e7eb;
-        margin-bottom:20px;
-    }
+        .page-header-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 22px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
 
-    .page-title {
-        font-size:20px;
-        font-weight:700;
-        margin:0;
-    }
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
 
-    .detail-card {
-        background:#fff;
-        border-radius:16px;
-        padding:24px 28px;
-        border:1px solid #e5e7eb;
-        box-shadow:0 8px 24px rgba(0,0,0,0.05);
-    }
+        .detail-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
 
-    .detail-row {
-        margin-bottom:14px;
-        font-size:14px;
-    }
+        .detail-row {
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
 
-    .detail-label {
-        font-weight:700;
-        color:#374151;
-        min-width:120px;
-        display:inline-block;
-    }
-</style>
+        .detail-label {
+            font-weight: 700;
+            color: #374151;
+            min-width: 120px;
+            display: inline-block;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -57,6 +58,10 @@
         <a href="{{ route('bookings.history') }}" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-arrow-left-short me-1"></i> ย้อนกลับ
         </a>
+        <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-success btn-sm">
+            <i class="bi bi-pencil-square me-1"></i> แก้ไข
+        </a>
+
     </div>
 
     <div class="detail-card">
@@ -82,10 +87,10 @@
                     <span class="detail-label">เบอร์โทรศัพท์ :</span>
                     {{ $booking->phone ?? '-' }}
                 </div>
-                <div class="detail-row">
+                {{-- <div class="detail-row">
                     <span class="detail-label">อีเมล :</span>
                     {{ $booking->email ?? '-' }}
-                </div>
+                </div> --}}
             </div>
         </div>
 

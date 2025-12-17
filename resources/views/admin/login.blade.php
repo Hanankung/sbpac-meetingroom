@@ -1,3 +1,4 @@
+{{-- resources/views/admin/login.blade.php --}}
 <!doctype html>
 <html lang="th">
 

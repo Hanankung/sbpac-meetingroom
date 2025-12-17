@@ -1,3 +1,4 @@
+{{-- resources/views/users/bookings_history.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'ประวัติการจอง | ระบบจองห้องประชุม ศอ.บต.')
@@ -80,13 +81,8 @@
                     <span class="input-group-text bg-white">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input
-                        type="text"
-                        name="q"
-                        class="form-control"
-                        placeholder="ค้นหาชื่อ / ห้อง / หัวข้อ"
-                        value="{{ request('q') }}"
-                    >
+                    <input type="text" name="q" class="form-control" placeholder="ค้นหาชื่อ / ห้อง / หัวข้อ"
+                        value="{{ request('q') }}">
                 </div>
             </form>
         </div>
@@ -101,7 +97,7 @@
                     <th>เวลา</th>
                     <th>ชื่อ - สกุล</th>
                     <th>ห้องประชุม</th>
-                    <th class="text-center">รายละเอียด</th>
+                    <th class="text-center">จัดการ</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,12 +119,17 @@
 
                         <td class="text-center">
                             <a href="{{ route('bookings.show', $booking->id) }}" class="btn-detail">รายละเอียด</a>
+                            <a href="{{ route('bookings.edit', $booking->id) }}"
+                                class="btn btn-outline-secondary btn-sm ms-1" style="border-radius:999px;">
+                                แก้ไข
+                            </a>
                         </td>
+
                     </tr>
                 @empty
                     <tr>
                         <td colspan="6" class="text-center text-muted py-4">
-                            @if(request('q'))
+                            @if (request('q'))
                                 ไม่พบรายการตามคำค้น "{{ request('q') }}"
                             @else
                                 ยังไม่มีประวัติการจอง

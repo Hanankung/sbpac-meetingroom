@@ -12,7 +12,9 @@ class BookingController extends Controller
     // แสดงฟอร์มจองห้อง (ใช้ของเดิมได้เลย)
     public function create(Room $room)
     {
-        return view('users.bookings_create', compact('room'));
+        $user = Auth::user(); // ถ้าใช้ guard อื่นค่อยเปลี่ยนเป็น Auth::guard('xxx')->user()
+
+        return view('users.bookings_create', compact('room', 'user'));
     }
 
     // รับข้อมูลจากฟอร์มแล้วบันทึก
@@ -28,7 +30,7 @@ class BookingController extends Controller
             'name'          => ['required', 'string', 'max:100'],
             'lastname'      => ['required', 'string', 'max:100'],
             'phone'         => ['nullable', 'string', 'max:20'],
-            'email'         => ['nullable', 'email', 'max:255'],
+            // 'email'         => ['nullable', 'email', 'max:255'],
         ]);
 
         // 2) เช็กว่าห้องว่างไหม (ดูเฉพาะห้องนี้ + วันที่นี้ + เวลา overlap)
@@ -58,7 +60,7 @@ class BookingController extends Controller
             'name'          => $request->name,
             'lastname'      => $request->lastname,
             'phone'         => $request->phone,
-            'email'         => $request->email,
+            // 'email'         => $request->email,
         ]);
 
 

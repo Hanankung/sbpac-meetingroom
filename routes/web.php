@@ -32,18 +32,27 @@ Route::get('/rooms/{room}', [UserRoomController::class, 'show'])->name('user.roo
 Route::middleware('auth')->group(function () {
     Route::get('/rooms/{room}/book', [BookingController::class, 'create'])->name('user.bookings.create');
     Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('user.bookings.store');
+
+// ประวัติการจอง (เฉพาะคนที่ล็อกอิน)
+    Route::get('/bookings/history', [UserRoomController::class, 'bookingHistory'])
+        ->name('bookings.history');
+
+    //รายละเอียดรายการจอง (เฉพาะเจ้าของ)
+    Route::get('/bookings/{booking}', [UserRoomController::class, 'historyShow'])
+        ->name('bookings.show');
+
+    // แก้ไข
+    Route::get('/bookings/{booking}/edit', [UserRoomController::class, 'editBooking'])
+        ->name('bookings.edit');
+
+    // บันทึกการแก้ไข
+    Route::put('/bookings/{booking}', [UserRoomController::class, 'updateBooking'])
+        ->name('bookings.update');
+
 });
 
-
-// ประวัติการจองห้องประชุม (ฝั่งผู้ใช้งาน)
-Route::get('/bookings/history', [UserRoomController::class, 'bookingHistory'])
-    ->name('bookings.history');
-
-// หน้า "รายละเอียดประวัติการจอง 1 รายการ"
-Route::get('/bookings/{booking}', [UserRoomController::class, 'historyShow'])
-    ->name('bookings.show');
-
-Route::get('/login', [UserAuthController::class, 'showLogin'])->name('user.login');
+Route::get('/login', [UserAuthController::class, 'showLogin'])->name('login');
+Route::get('/user/login', [UserAuthController::class, 'showLogin'])->name('user.login');
 Route::post('/login', [UserAuthController::class, 'login'])->name('user.login.submit');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 
