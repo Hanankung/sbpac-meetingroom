@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -33,6 +34,24 @@ class BookingController extends Controller
             // 'email'         => ['nullable', 'email', 'max:255'],
         ]);
 
+        $tz = config('app.timezone', 'Asia/Bangkok');
+        $now = Carbon::now($tz);
+
+        $startAt = Carbon::parse($request->booking_date . ' ' . $request->start_time, $tz);
+        $endAt   = Carbon::parse($request->booking_date . ' ' . $request->end_time, $tz);
+
+        if ($startAt->lt($now)) {
+            return back()
+                ->withErrors(['start_time' => 'ไม่สามารถจองย้อนหลังได้ กรุณาเลือกเวลา “ปัจจุบันหรืออนาคต”'])
+                ->withInput();
+        }
+
+        if ($endAt->lte($now)) {
+            return back()
+                ->withErrors(['end_time' => 'เวลาสิ้นสุดต้องเป็น “ปัจจุบันหรืออนาคต”'])
+                ->withInput();
+        }
+
         // 2) เช็กว่าห้องว่างไหม (ดูเฉพาะห้องนี้ + วันที่นี้ + เวลา overlap)
         $exists = Booking::where('room_id', $room->id)
             ->where('booking_date', $request->booking_date)
@@ -50,7 +69,7 @@ class BookingController extends Controller
 
         // 3) ถ้าไม่ชน -> สร้างการจองได้เลย (ถือว่าอนุมัติทันที)
         Booking::create([
-            'user_id'      => Auth::id(),// ✅ ผูกกับ user ที่ล็อกอินอยู่
+            'user_id'      => Auth::id(), // ✅ ผูกกับ user ที่ล็อกอินอยู่
             'room_id'       => $room->id,
             'booking_date'  => $request->booking_date,
             'start_time'    => $request->start_time,

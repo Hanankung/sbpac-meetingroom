@@ -298,34 +298,72 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ---------- Date picker ----------
-            flatpickr(".js-date-picker", {
-                locale: "th", // ภาษาไทย
-                dateFormat: "Y-m-d", // format ที่จะส่งเข้า DB
-                altInput: true, // แสดงแบบสวย ๆ ให้ผู้ใช้
-                altFormat: "j F Y", // 1 มกราคม 2568
-                defaultDate: "{{ old('booking_date') ?? '' }}",
-                minDate: "today", // ไม่ให้เลือกวันย้อนหลัง (ถ้าไม่ต้องการตัดบรรทัดนี้ออก)
-            });
+document.addEventListener('DOMContentLoaded', function () {
 
-            // ---------- Time picker (เริ่ม) ----------
-            flatpickr(".js-time-start", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i", // 24 ชม. เช่น 09:30
-                time_24hr: true,
-                defaultDate: "{{ old('start_time') ?? '' }}"
-            });
+    const pad2 = (n) => String(n).padStart(2,'0');
 
-            // ---------- Time picker (สิ้นสุด) ----------
-            flatpickr(".js-time-end", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true,
-                defaultDate: "{{ old('end_time') ?? '' }}"
-            });
-        });
-    </script>
+    // ปัดเวลา "ตอนนี้" ขึ้นเป็นทุก 5 นาที (กันเลือกเวลาย้อนหลังแบบเหลื่อม ๆ)
+    function nowRounded5() {
+        const d = new Date();
+        d.setSeconds(0);
+        d.setMilliseconds(0);
+        const m = d.getMinutes();
+        const add = (5 - (m % 5)) % 5;
+        d.setMinutes(m + add);
+        return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    const startPicker = flatpickr(".js-time-start", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+    });
+
+    const endPicker = flatpickr(".js-time-end", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+    });
+
+    const datePicker = flatpickr(".js-date-picker", {
+        locale: "th",
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "j F Y",
+        minDate: "today",
+
+        onChange: function(selectedDates, dateStr) {
+            const todayStr = flatpickr.formatDate(new Date(), "Y-m-d");
+
+            if (dateStr === todayStr) {
+                // ถ้าเป็น "วันนี้" -> ห้ามเลือกเวลาเริ่มก่อนตอนนี้
+                const minT = nowRounded5();
+                startPicker.set('minTime', minT);
+                endPicker.set('minTime', minT);
+            } else {
+                // ถ้าเป็น "อนาคต" -> เลือกได้ทั้งวัน
+                startPicker.set('minTime', "00:00");
+                endPicker.set('minTime', "00:00");
+            }
+
+            // เคลียร์เวลาที่เคยเลือก (กันค้างค่าเดิมที่ผิดเงื่อนไข)
+            startPicker.clear();
+            endPicker.clear();
+        }
+    });
+
+    // ถ้าเลือกเวลาเริ่มแล้ว -> บังคับเวลาสิ้นสุดต้องมากกว่าเริ่ม
+    startPicker.set('onChange', function(selDates, timeStr){
+        if (!timeStr) return;
+        endPicker.set('minTime', timeStr);
+        // ถ้า end ที่เลือกอยู่ < start -> เคลียร์
+        const endVal = document.querySelector('#end_time')?.value;
+        if (endVal && endVal <= timeStr) endPicker.clear();
+    });
+
+});
+</script>
+
 @endpush
